@@ -1,0 +1,38 @@
+<svg width="420" height="90" viewBox="0 0 420 90" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#57c2a4"></stop>
+      <stop offset="100%" stop-color="#7fffd4"></stop>
+    </linearGradient>
+
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"></feGaussianBlur>
+      <feMerge>
+        <feMergeNode in="blur"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Circuit Icon -->
+  <g transform="translate(10,20)" stroke="#57c2a4" stroke-width="2" fill="none" filter="url(#glow)">
+    <line x1="0" y1="25" x2="30" y2="25"></line>
+    <circle cx="35" cy="25" r="4"></circle>
+
+    <line x1="10" y1="0" x2="30" y2="20"></line>
+    <circle cx="35" cy="20" r="4"></circle>
+
+    <line x1="10" y1="50" x2="30" y2="30"></line>
+    <circle cx="35" cy="30" r="4"></circle>
+  </g>
+
+  <!-- Text -->
+  <text x="70" y="60" font-family="Segoe UI, Arial, sans-serif" font-size="48" font-weight="700" fill="url(#grad)" filter="url(#glow)" letter-spacing="4">
+    MDEV
+  </text>
+
+  <!-- Subtext -->
+  <text x="255" y="60" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="500" fill="#57c2a4" opacity="0.8">
+    PROGRAMMER
+  </text>
+</svg>
