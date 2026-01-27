@@ -12,9 +12,9 @@ const bulletPoints = [
 ];
 const AboutMe = () => {
   return (
-    <section id="Aboutme">
+    <section className="scroll-mt-20" id="home">
       <Container>
-        <Card className="group grid grid-cols-2 gap-8 hover:bg-linear-to-bl from-secondary/40 to-transparent to-40% shadow-sm shadow-accent hover:shadow-lg transition-all duration-500">
+        <Card className="group grid grid-cols-2 gap-8 hover:bg-linear-to-bl from-secondary/40 to-transparent to-40% shadow-[0_10px_15px_rgba(61,213,152,0.5),-1px_-1px_5px_rgba(61,213,152,0.5)] shadow-accent hover:shadow-[0_20px_25px_rgba(0,0,0,0.1),0_10px_10px_rgba(0,0,0,0.04),-2px_-2px_10px_rgba(61,213,152,0.7)] transition-all duration-500">
           <div className="space-y-4 flex flex-col justify-around">
             <div className="flex mb-4">
               <div className="mr-4 w-24 h-24 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-accent shadow-[0_0_20px_var(--color-secondary)] group-hover:scale-105 transition-transform duration-500">

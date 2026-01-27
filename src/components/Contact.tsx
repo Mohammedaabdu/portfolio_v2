@@ -4,6 +4,7 @@ import emailjs from "@emailjs/browser";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { motion } from "motion/react";
 import toast, { Toaster, ToastBar } from "react-hot-toast";
 import "../index.css";
 const formSchema = z.object({
@@ -56,7 +57,13 @@ const Contact = () => {
     }
   }
   return (
-    <section id="contact">
+    <motion.section
+      id="contact"
+      initial={{ opacity: 0, y: 100 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1 }}
+      viewport={{ margin: "0px 0px -200px 0px" }}
+    >
       <Container>
         <Toaster
           reverseOrder={false}
@@ -188,7 +195,7 @@ const Contact = () => {
           </form>
         </Card>
       </Container>
-    </section>
+    </motion.section>
   );
 };
 

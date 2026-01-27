@@ -7,7 +7,7 @@ interface cardProps {
 
 const Card = ({ children, className }: cardProps) => {
   return (
-    <article className={`relative rounded-2xl p-6 w-full ${className}`}>
+    <article className={`rounded-2xl p-6 w-full ${className}`}>
       {children}
     </article>
   );
