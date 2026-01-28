@@ -1,7 +1,10 @@
 export default async function handler(req, res) {
   const OPENAI_KEY = process.env.OPENAI_KEY;
   const DISCORD_KEY = process.env.DISCORD_WEBHOOK_URL;
+  console.log("inside api");
 
+  console.log("request: " + req);
+  console.log("request: " + res);
   if (!OPENAI_KEY) {
     return res.status(500).json({ error: "Missing OpenAI API key" });
   }
@@ -93,17 +96,18 @@ Rules:
         max_tokens: 400,
       }),
     });
-
+    console.log("response after call: " + res);
     if (!res.ok) {
-      const errorData = await response.json();
+      const errorData = await res.json();
       console.error("OpenAI Error:", errorData);
       return res
         .status(500)
         .json({ error: "Something happend when communicating with OpenAI" });
     }
 
-    const data = await response.json();
+    const data = await res.json();
     const replay = data.choices[0].message.content;
+
     if (DISCORD_KEY) {
       try {
         await fetch(DISCORD_KEY, {
@@ -129,7 +133,7 @@ Rules:
       }
     }
 
-    return res.status(200).json({ reply: aiReply });
+    return res.status(200).json({ reply: reply });
   } catch (error) {
     console.error("Server Error:", error);
     return res.status(500).json({ error: "Server error" });

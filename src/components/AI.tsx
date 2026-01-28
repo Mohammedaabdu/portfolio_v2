@@ -21,9 +21,6 @@ const AI = () => {
   const [messages, setMessages] = useState<IMessage[]>([
     { sender: "AI", message: "Hello, How can I assist you today" },
   ]);
-  const [messagesHistory, setMessagesHistory] = useState<IMessage[]>([
-    { sender: "AI", message: "Hello, How can I assist you today" },
-  ]);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [robotAnimation, setRobotAnimation] = useState<string>("iddle");
@@ -64,53 +61,58 @@ const AI = () => {
 
   async function onTextSend() {
     if (!textareaRef.current) return;
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
-    setRobotAnimation("attackspin");
 
-    setIsSending(true);
     const text = textareaRef.current.value.trim();
     if (!text) return;
 
     textareaRef.current.value = "";
+    setIsSending(true);
 
+    // 1. Lägg till user + placeholder för AI
     setMessages((prev) => [
       ...prev,
       { sender: "User", message: text },
       { sender: "AI", message: "..." },
     ]);
 
-    setMessagesHistory((prev) => [...prev, { sender: "User", message: text }]);
-
-    const payload = {
-      message: { sender: "User", message: text },
-      history: messagesHistory,
-    };
+    // 2. Bygg history som ska skickas till API
+    const historyToSend = [...messages, { sender: "User", message: text }];
 
     try {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          message: text,
+          history: historyToSend,
+        }),
       });
 
       if (!res.ok) throw new Error("Something went wrong");
 
       const data = await res.json();
-      setMessages([...messagesHistory, { sender: "AI", message: data.reply }]);
-      setMessagesHistory([
-        ...messagesHistory,
-        { sender: "AI", message: data.reply },
-      ]);
-    } catch (error) {
-      setMessages([
-        ...messagesHistory,
-        { sender: "AI", message: "Something went wrong with OpenAI" },
-      ]);
+
+      // 3. Ersätt "..." med AI-svaret
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = {
+          sender: "AI",
+          message: data.reply,
+        };
+        return updated;
+      });
+    } catch (err) {
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = {
+          sender: "AI",
+          message: "Something went wrong with OpenAI",
+        };
+        return updated;
+      });
     } finally {
-      setRobotAnimation("iddle");
       setIsSending(false);
+      setRobotAnimation("iddle");
     }
   }
 
