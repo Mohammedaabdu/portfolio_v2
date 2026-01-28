@@ -17,7 +17,7 @@ interface RobotsProps {
 const Robots = ({ isMobile, currentAnimation }: RobotsProps) => {
   const robot = useGLTF("./robot/source/robot.gltf");
   const groupRef = useRef<THREE.Group>(null);
-  const { actions, names } = useAnimations(robot.animations, groupRef);
+  const { actions } = useAnimations(robot.animations, groupRef);
   const previousAnimationRef = useRef<string>("");
   useEffect(() => {
     robot.scene.traverse((child) => {
