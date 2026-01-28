@@ -69,10 +69,12 @@ Rules:
 - If a question is unclear, ask a short clarifying question.
 `;
 
-  const messagesToSend = [{ role: "assistant", content: systemPrompt }];
+  const messagesToSend = [{ role: "developer", content: systemPrompt }];
 
   if (history && history.length > 0) {
-    const cleanHistory = history.filter((msg) => msg.role !== "AI").slice(-10);
+    const cleanHistory = history
+      .filter((msg) => msg.role !== "assistant")
+      .slice(-10);
 
     messagesToSend.push(...cleanHistory);
   }
@@ -90,7 +92,7 @@ Rules:
         model: "gpt-5-nano",
         messages: messagesToSend,
         temperature: 0.7,
-        max_tokens: 400,
+        max_completion_tokens: 300,
       }),
     });
     console.log("response after call: " + res);

@@ -8,7 +8,7 @@ import TypingDots from "./TypingDots";
 import RobotCanvas from "./canvas/Robot";
 interface IMessage {
   sender: "assistant" | "user";
-  message: string;
+  content: string;
 }
 const API_URL = import.meta.env.DEV
   ? "http://localhost:3001/api/chat"
@@ -19,7 +19,7 @@ const AI = () => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [isSending, setIsSending] = useState(false);
   const [messages, setMessages] = useState<IMessage[]>([
-    { sender: "assistant", message: "Hello, How can I assist you today" },
+    { sender: "assistant", content: "Hello, How can I assist you today" },
   ]);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -71,12 +71,12 @@ const AI = () => {
     // 1. Lägg till user + placeholder för AI
     setMessages((prev) => [
       ...prev,
-      { sender: "user", message: text },
-      { sender: "assistant", message: "..." },
+      { sender: "user", content: text },
+      { sender: "assistant", content: "..." },
     ]);
 
     // 2. Bygg history som ska skickas till API
-    const historyToSend = [...messages, { sender: "User", message: text }];
+    const historyToSend = [...messages, { sender: "User", content: text }];
 
     try {
       const res = await fetch(API_URL, {
@@ -97,7 +97,7 @@ const AI = () => {
         const updated = [...prev];
         updated[updated.length - 1] = {
           sender: "assistant",
-          message: data.reply,
+          content: data.reply,
         };
         return updated;
       });
@@ -106,7 +106,7 @@ const AI = () => {
         const updated = [...prev];
         updated[updated.length - 1] = {
           sender: "assistant",
-          message: "Something went wrong with OpenAI",
+          content: "Something went wrong with OpenAI",
         };
         return updated;
       });
@@ -183,10 +183,10 @@ const AI = () => {
             }
           `}
                         >
-                          {message.message === "..." ? (
+                          {message.content === "..." ? (
                             <TypingDots />
                           ) : (
-                            message.message
+                            message.content
                           )}
                         </div>
 
