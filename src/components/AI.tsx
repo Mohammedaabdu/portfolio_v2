@@ -5,10 +5,15 @@ import { AnimatePresence, motion } from "motion/react";
 import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import TypingDots from "./TypingDots";
+import RobotCanvas from "./canvas/Robot";
 interface IMessage {
-  sender: string;
+  sender: "AI" | "User";
   message: string;
 }
+const API_URL = import.meta.env.DEV
+  ? "http://localhost:3001/api/chat"
+  : "/api/chat";
+
 const AI = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -16,6 +21,13 @@ const AI = () => {
   const [messages, setMessages] = useState<IMessage[]>([
     { sender: "AI", message: "Hello, How can I assist you today" },
   ]);
+  const [messagesHistory, setMessagesHistory] = useState<IMessage[]>([
+    { sender: "AI", message: "Hello, How can I assist you today" },
+  ]);
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const [robotAnimation, setRobotAnimation] = useState<string>("iddle");
+  const [hasPlayedHello, setHasPlayedHello] = useState(false);
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -23,43 +35,96 @@ const AI = () => {
         chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
+
+  function handleTyping() {
+    if (robotAnimation !== "attackminiguns") {
+      setRobotAnimation("attackminiguns");
+    }
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    typingTimeoutRef.current = setTimeout(() => {
+      setRobotAnimation("iddle");
+    }, 1500);
+  }
+
   function onEnterPress(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (isSending && e.key == "Enter" && e.shiftKey == false) {
+    if (isSending && e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       return;
     }
-    if (e.key == "Enter" && e.shiftKey == false) {
+
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       onTextSend();
     }
   }
 
-  function onTextSend() {
+  async function onTextSend() {
     if (!textareaRef.current) return;
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    setRobotAnimation("attackspin");
 
     setIsSending(true);
     const text = textareaRef.current.value.trim();
     if (!text) return;
 
     textareaRef.current.value = "";
-    // Lägg till user + "AI typing..."
+
     setMessages((prev) => [
       ...prev,
       { sender: "User", message: text },
       { sender: "AI", message: "..." },
     ]);
 
-    // Simulera AI-svar efter 3 sek
-    setTimeout(() => {
-      setMessages((prev) => {
-        // ta bort "..."
-        const withoutTyping = prev.slice(0, -1);
+    setMessagesHistory((prev) => [...prev, { sender: "User", message: text }]);
 
-        return [...withoutTyping, { sender: "AI", message: "svar från AI" }];
+    const payload = {
+      message: { sender: "User", message: text },
+      history: messagesHistory,
+    };
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
+
+      if (!res.ok) throw new Error("Something went wrong");
+
+      const data = await res.json();
+      setMessages([...messagesHistory, { sender: "AI", message: data.reply }]);
+      setMessagesHistory([
+        ...messagesHistory,
+        { sender: "AI", message: data.reply },
+      ]);
+    } catch (error) {
+      setMessages([
+        ...messagesHistory,
+        { sender: "AI", message: "Something went wrong with OpenAI" },
+      ]);
+    } finally {
+      setRobotAnimation("iddle");
       setIsSending(false);
-    }, 3000);
+    }
   }
+
+  const handleViewportEnter = () => {
+    if (!hasPlayedHello) {
+      setRobotAnimation("hello");
+      setHasPlayedHello(true);
+
+      setTimeout(() => {
+        setRobotAnimation("iddle");
+        setHasPlayedHello(false);
+      }, 2000);
+    }
+  };
 
   return (
     <motion.section
@@ -67,6 +132,7 @@ const AI = () => {
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
+      onViewportEnter={handleViewportEnter}
       viewport={{ margin: "0px 0px -200px 0px" }}
     >
       <Container>
@@ -74,7 +140,7 @@ const AI = () => {
           Ask My AI Assisant
         </h2>
         <div>
-          <Card className="group grid grid-cols-2 gap-8 hover:bg-linear-to-bl hover:from-blue-500/40 hover:to-transparent hover:to-40% shadow-[0_10px_15px_rgba(37,99,235,0.5),-1px_-1px_5px_rgba(37,99,235,0.5)] hover:shadow-blue-600 hover:shadow-[0_20px_20px_rgba(0,0,0,0.1),0_10px_10px_rgba(0,0,0,0.04),-2px_-2px_10px_rgba(37,99,235,0.7)] transition-all duration-500">
+          <Card className="group grid grid-cols-2 gap-8 hover:bg-linear-to-bl  hover:from-blue-500/40 hover:to-transparent hover:to-40% shadow-[0_10px_15px_rgba(37,99,235,0.5),-1px_-1px_5px_rgba(37,99,235,0.5)] hover:shadow-blue-600 hover:shadow-[0_20px_20px_rgba(0,0,0,0.1),0_10px_10px_rgba(0,0,0,0.04),-2px_-2px_10px_rgba(37,99,235,0.7)] transition-all duration-500">
             <div className="flex flex-col justify-between overflow-hidden space-y-4 h-120 rounded-2xl bg-card border border-border">
               <div className="p-2 text-center bg-blue-600 rounded-t-2xl">
                 AI Assistance
@@ -139,9 +205,10 @@ const AI = () => {
               <div className="flex py-2 items-center justify-center space-x-2 text-center rounded-b-2xl">
                 <textarea
                   onKeyDown={onEnterPress}
+                  onChange={handleTyping}
                   name="userchat"
                   ref={textareaRef}
-                  className="overflow-hidden w-[85%] resize-none h-12 border border-blue-400 rounded-full p-2 focus:outline-none
+                  className="overflow-hidden w-[85%] resize-none h-12 border border-blue-400 rounded-full py-2.5 px-3 focus:outline-none
              focus:ring-2
              focus:ring-blue-500
              focus:border-blue-500
@@ -171,6 +238,7 @@ const AI = () => {
                 </button>
               </div>
             </div>
+            <RobotCanvas currentAnimation={robotAnimation} />
           </Card>
         </div>
       </Container>

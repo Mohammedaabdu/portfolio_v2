@@ -20,7 +20,8 @@ const projectList: IProject[] = [
   {
     img: trejdegruppen,
     prjectName: "Tredje Gruppen AB",
-    description: "Built a shipping company website",
+    description:
+      "A React-based logistics demo showcasing animated UI and responsive design.",
     url: "https://tredje-gruppen-ab.vercel.app/",
     githubUrl: "https://github.com/Mohammedaabdu/Tredje-Gruppen-AB",
     techStack: ["React", "Typescript", "Html", "TailwindCss", "Framer Motion"],
@@ -28,7 +29,8 @@ const projectList: IProject[] = [
   {
     img: solarSystem,
     prjectName: "Solar System",
-    description: "Built the solar system with help of three.js framework",
+    description:
+      "An interactive 3D solar system where users can explore planetary orbits.",
     url: "https://3-d-solar-system-smoky.vercel.app/",
     githubUrl: "https://github.com/Mohammedaabdu/3D_SolarSystem",
     techStack: ["ThreeJs", "JS", "Html"],
@@ -36,18 +38,27 @@ const projectList: IProject[] = [
   {
     img: portfolio,
     prjectName: "Portfolio",
-    description: "My old portfolio",
+    description: "My first portfolio focused on clean UI and smooth animations",
     url: "https://mohammed-3d-portfolio.vercel.app/",
     githubUrl: "https://github.com/Mohammedaabdu/Mohammed_3D_portfolio",
     techStack: ["React", "Typescript", "Html", "TailwindCss", "Framer Motion"],
   },
   {
     img: portfolio,
-    prjectName: "Portfolio2",
-    description: "My current portfolio",
+    prjectName: "Portfolio V2",
+    description: "This site — a 3D-enhanced portfolio",
     url: "https://mohammed-3d-portfolio.vercel.app/",
     githubUrl: "https://github.com/Mohammedaabdu/portfolio_v2",
-    techStack: ["React", "Typescript", "Html", "TailwindCss", "Framer Motion"],
+    techStack: [
+      "React",
+      "Typescript",
+      "Html",
+      "TailwindCss",
+      "Framer Motion",
+      "Threejs",
+      "R3F",
+      "OpenApI",
+    ],
   },
 ];
 
