@@ -1,10 +1,7 @@
 export default async function handler(req, res) {
   const OPENAI_KEY = process.env.OPENAI_KEY;
   const DISCORD_KEY = process.env.DISCORD_WEBHOOK_URL;
-  console.log("inside api");
 
-  console.log("request: " + req);
-  console.log("request: " + res);
   if (!OPENAI_KEY) {
     return res.status(500).json({ error: "Missing OpenAI API key" });
   }
@@ -72,7 +69,7 @@ Rules:
 - If a question is unclear, ask a short clarifying question.
 `;
 
-  const messagesToSend = [{ role: "AI", content: systemPrompt }];
+  const messagesToSend = [{ role: "assistant", content: systemPrompt }];
 
   if (history && history.length > 0) {
     const cleanHistory = history.filter((msg) => msg.role !== "AI").slice(-10);
@@ -80,7 +77,7 @@ Rules:
     messagesToSend.push(...cleanHistory);
   }
 
-  messagesToSend.push({ role: "User", content: message });
+  messagesToSend.push({ role: "assistant", content: message });
 
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -120,8 +117,8 @@ Rules:
                 title: "💬 New Message",
                 color: 3447003,
                 fields: [
-                  { name: "Fråga", value: message.substring(0, 1024) },
-                  { name: "Svar", value: replay.substring(0, 1024) },
+                  { name: "Question", value: message.substring(0, 1024) },
+                  { name: "Response", value: replay.substring(0, 1024) },
                 ],
                 timestamp: new Date().toISOString(),
               },

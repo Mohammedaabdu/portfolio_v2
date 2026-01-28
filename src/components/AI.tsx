@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import TypingDots from "./TypingDots";
 import RobotCanvas from "./canvas/Robot";
 interface IMessage {
-  sender: "AI" | "User";
+  sender: "assistant" | "user";
   message: string;
 }
 const API_URL = import.meta.env.DEV
@@ -19,7 +19,7 @@ const AI = () => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [isSending, setIsSending] = useState(false);
   const [messages, setMessages] = useState<IMessage[]>([
-    { sender: "AI", message: "Hello, How can I assist you today" },
+    { sender: "assistant", message: "Hello, How can I assist you today" },
   ]);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -71,8 +71,8 @@ const AI = () => {
     // 1. Lägg till user + placeholder för AI
     setMessages((prev) => [
       ...prev,
-      { sender: "User", message: text },
-      { sender: "AI", message: "..." },
+      { sender: "user", message: text },
+      { sender: "assistant", message: "..." },
     ]);
 
     // 2. Bygg history som ska skickas till API
@@ -96,7 +96,7 @@ const AI = () => {
       setMessages((prev) => {
         const updated = [...prev];
         updated[updated.length - 1] = {
-          sender: "AI",
+          sender: "assistant",
           message: data.reply,
         };
         return updated;
@@ -105,7 +105,7 @@ const AI = () => {
       setMessages((prev) => {
         const updated = [...prev];
         updated[updated.length - 1] = {
-          sender: "AI",
+          sender: "assistant",
           message: "Something went wrong with OpenAI",
         };
         return updated;
@@ -153,7 +153,7 @@ const AI = () => {
               >
                 <AnimatePresence>
                   {messages.map((message, idx) => {
-                    const isAI = message.sender === "AI";
+                    const isAI = message.sender === "assistant";
 
                     return (
                       <motion.div
