@@ -4,7 +4,7 @@ import kau from "../assets/KAU.jpg";
 import { motion } from "motion/react";
 import Container from "./Container";
 import Card from "./Card";
-import { useEffect, useRef, useState, type JSX } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
