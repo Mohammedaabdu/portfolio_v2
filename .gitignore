@@ -27,4 +27,4 @@ dist-ssr
 *!.env.example
 .vercel
 .env*.local
-*api/dev-server.js
+api/dev-server.js
