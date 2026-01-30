@@ -6,7 +6,7 @@ import Projects from "./Projects";
 
 const MainContent = () => {
   return (
-    <div className="mt-28">
+    <div className="mt-28 space-y-24">
       <AboutMe></AboutMe>
       <Expirence></Expirence>
       <Projects></Projects>

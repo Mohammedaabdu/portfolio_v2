@@ -115,7 +115,7 @@ const Projects = () => {
     <>
       <motion.section
         id="projects"
-        className="scroll-mt-70"
+        className="scroll-mt-40"
         ref={sectionRef}
         initial={{ opacity: 0, y: 100 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -125,12 +125,12 @@ const Projects = () => {
         <Container>
           <motion.h2
             style={{ opacity: titleOpacity }}
-            className="sticky top-30 z-20 mb-8 bg-linear-to-r from-secondary to-blue-600 bg-clip-text text-4xl font-extrabold text-transparent"
+            className="sticky text-center md:text-start top-30 z-20 mb-8 bg-linear-to-r from-secondary to-blue-600 bg-clip-text text-4xl font-extrabold text-transparent"
           >
             Selected projects
           </motion.h2>
           <div className="text-center md:text-start">
-            <div className="grid grid-cols-1 gap-12 ">
+            <div className="grid grid-cols-1 gap-24 ">
               {projectList.map((project, idx) => (
                 <div
                   key={idx}
@@ -147,7 +147,7 @@ const Projects = () => {
                     transitionSpeed={10000}
                   >
                     <Card
-                      className={`group grid grid-cols-2 gap-4 bg-dark hover:bg-linear-to-bl hover:scale-105 ${colors[idx].comboShadowBase} ${colors[idx].comboShadowHover} transition-all duration-500`}
+                      className={`group grid md:grid-cols-2 gap-4 hover:bg-linear-to-bl hover:scale-105 ${colors[idx].comboShadowBase} ${colors[idx].comboShadowHover} transition-all duration-500`}
                     >
                       <div className="rounded-lg overflow-hidden">
                         <img
@@ -156,10 +156,10 @@ const Projects = () => {
                           className="h-full w-full object-cover group-hover:scale-110 duration-500 transition-transform"
                         />
                       </div>
-                      <div className="flex flex-col justify-between">
-                        <div className="space-y-2">
+                      <div className="flex flex-col justify-between text-start">
+                        <div className="space-y-4">
                           <h3
-                            className={`text-xl sm:text-2xl font-semibold text-white tracking-tight font-sans transition-colors duration-500 ${colors[idx].hoverText}`}
+                            className={`text-xl  sm:text-2xl font-semibold text-white tracking-tight font-sans transition-colors duration-500 ${colors[idx].hoverText}`}
                           >
                             {project.prjectName}
                           </h3>
@@ -174,7 +174,7 @@ const Projects = () => {
                             ))}
                           </div>
                         </div>
-                        <h4 className="text-gray-300 mb-3 ">
+                        <h4 className="text-gray-300 my-4">
                           {project.description}
                         </h4>
                         <div className="flex space-x-2 justify-between">

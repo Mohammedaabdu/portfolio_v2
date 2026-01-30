@@ -7,6 +7,8 @@ import { z } from "zod";
 import { motion } from "motion/react";
 import toast, { Toaster, ToastBar } from "react-hot-toast";
 import "../index.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub, faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
 const formSchema = z.object({
   user: z
     .string()
@@ -59,6 +61,7 @@ const Contact = () => {
   return (
     <motion.section
       id="contact"
+      className="scroll-mt-40"
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
@@ -194,6 +197,31 @@ const Contact = () => {
             </div>
           </form>
         </Card>
+
+        <div className="mt-6 space-x-6 flex justify-center">
+          <a
+            href="https://www.linkedin.com/in/mohammed-abdu-9809041a2/"
+            target="_blank"
+            className="flex justify-center items-center bg-[#0A1B2E] border border-[#38BDF8]/40
+text-[#38BDF8] size-12 rounded-full
+transition-all duration-200
+hover:bg-[#102A44] hover:shadow-[0_0_12px_#38BDF8]"
+          >
+            <FontAwesomeIcon size="lg" icon={faLinkedinIn} />
+          </a>
+
+          <a
+            href="https://github.com/Mohammedaabdu/"
+            target="_blank"
+            className="flex justify-center items-center 
+bg-[#120A1F] border border-[#C084FC]/40
+text-[#C084FC] size-12 rounded-full
+transition-all duration-200
+hover:bg-[#1E0F33] hover:shadow-[0_0_12px_#C084FC]"
+          >
+            <FontAwesomeIcon size="lg" icon={faGithub} />
+          </a>
+        </div>
       </Container>
     </motion.section>
   );

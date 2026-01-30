@@ -4,6 +4,9 @@ import kau from "../assets/KAU.jpg";
 import { motion } from "motion/react";
 import Container from "./Container";
 import Card from "./Card";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 interface IExpirence {
   role: string;
@@ -50,17 +53,28 @@ const expirences: IExpirence[] = [
 ];
 
 const Expirence = () => {
+  const [expandedCards, setExpandedCards] = useState<{
+    [key: number]: boolean;
+  }>({});
+
+  const toggleExpand = (index: number) => {
+    setExpandedCards((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
   return (
     <motion.section
       id="expirence"
+      className="scroll-mt-20"
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
       viewport={{ margin: "0px 0px -200px 0px" }}
-      className="mt-15"
     >
       <Container>
-        <h2 className="mb-8 bg-linear-to-r from-secondary to-blue-600 bg-clip-text text-4xl font-extrabold text-transparent">
+        <h2 className="mb-8 text-center md:text-start bg-linear-to-r from-secondary to-blue-600 bg-clip-text text-4xl font-extrabold text-transparent">
           Cv Timeline
         </h2>
         <div className="relative max-w-4xl mt-20 mx-auto">
@@ -69,6 +83,7 @@ const Expirence = () => {
 
           {expirences.map((exp, idx) => {
             const isLeft = idx % 2 === 0;
+            const isExpanded = expandedCards[idx] || false;
 
             return (
               <motion.div
@@ -77,7 +92,7 @@ const Expirence = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: idx * 0.2 }}
                 viewport={{ once: true }}
-                className={`relative flex mb-20 ${
+                className={`relative flex last:mb-0  mb-20 ${
                   isLeft ? "md:flex-row" : "md:flex-row-reverse"
                 } flex-row `}
               >
@@ -96,7 +111,7 @@ const Expirence = () => {
                     "relative md:w-[45%] ml-16 md:ml-0 p-6 bg-neutral-900"
                   }
                 >
-                  <span className="absolute -z-10 -inset-2 rounded-2xl blur-sm   bg-conic/decreasing from-violet-700 via-lime-300 to-violet-700"></span>
+                  <span className="absolute -z-10 -inset-2 rounded-2xl blur-sm bg-conic/decreasing from-violet-700 via-lime-300 to-violet-700"></span>
 
                   <div>
                     <p className="text-sm text-gray-300">{exp.date}</p>
@@ -105,16 +120,36 @@ const Expirence = () => {
                     </h3>
                     <h4 className="text-gray-300 mb-3">{exp.company}</h4>
                   </div>
-                  <div>
-                    <ul
-                      className={`text-gray-400 space-y-1 ${
-                        isLeft ? "list-disc ml-4" : "list-disc mr-4"
+                  <div className="space-y-4">
+                    <div
+                      className={`overflow-hidden transition-all duration-500 ${
+                        isExpanded ? "max-h-400" : "max-h-36 lg:max-h-none"
                       }`}
                     >
-                      {exp.description.map((d, i) => (
-                        <li key={i}>{d}</li>
-                      ))}
-                    </ul>
+                      <ul
+                        className={`text-gray-400 space-y-1 list-disc pl-6 ${
+                          isLeft ? "" : " md:pr-4"
+                        }`}
+                      >
+                        {exp.description.map((d, i) => (
+                          <li key={i}>{d}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <button
+                      onClick={() => toggleExpand(idx)}
+                      className="lg:hidden text-xs font-semibold text-white/90 transition-colors uppercase tracking-wide"
+                    >
+                      {isExpanded ? (
+                        <p>
+                          Less <FontAwesomeIcon icon={faChevronUp} />
+                        </p>
+                      ) : (
+                        <p>
+                          More <FontAwesomeIcon icon={faChevronDown} />
+                        </p>
+                      )}
+                    </button>
                   </div>
                 </Card>
               </motion.div>

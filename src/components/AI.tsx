@@ -19,7 +19,11 @@ const AI = () => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [isSending, setIsSending] = useState(false);
   const [messages, setMessages] = useState<IMessage[]>([
-    { role: "assistant", content: "Hello, How can I assist you today" },
+    {
+      role: "assistant",
+      content:
+        "Hello, This is AI Mohammed, Ask me anything about my projects or work expirence. ",
+    },
   ]);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -61,6 +65,7 @@ const AI = () => {
 
   async function onTextSend() {
     if (!textareaRef.current) return;
+    setRobotAnimation("attackspin");
 
     const text = textareaRef.current.value.trim();
     if (!text) return;
@@ -68,15 +73,11 @@ const AI = () => {
     textareaRef.current.value = "";
     setIsSending(true);
 
-    // 1. Lägg till user + placeholder för AI
     setMessages((prev) => [
       ...prev,
       { role: "user", content: text },
       { role: "assistant", content: "..." },
     ]);
-
-    // 2. Bygg history som ska skickas till API
-    const historyToSend = [...messages, { sender: "User", content: text }];
 
     try {
       const res = await fetch(API_URL, {
@@ -84,7 +85,7 @@ const AI = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: text,
-          history: historyToSend,
+          history: messages,
         }),
       });
 
@@ -92,7 +93,6 @@ const AI = () => {
 
       const data = await res.json();
 
-      // 3. Ersätt "..." med AI-svaret
       setMessages((prev) => {
         const updated = [...prev];
         updated[updated.length - 1] = {
@@ -112,7 +112,9 @@ const AI = () => {
       });
     } finally {
       setIsSending(false);
-      setRobotAnimation("iddle");
+      setTimeout(() => {
+        setRobotAnimation("iddle");
+      }, 2000);
     }
   }
 
@@ -131,6 +133,7 @@ const AI = () => {
   return (
     <motion.section
       id="AI"
+      className="scroll-mt-50"
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
@@ -138,13 +141,13 @@ const AI = () => {
       viewport={{ margin: "0px 0px -200px 0px" }}
     >
       <Container>
-        <h2 className="mb-8 bg-linear-to-r from-blue-600 via-cyan-400 to-teal-700 to-70% bg-clip-text text-4xl font-extrabold text-transparent">
+        <h2 className="mb-8 text-center md:text-start bg-linear-to-r from-blue-600 via-cyan-400 to-teal-700 to-70% bg-clip-text text-4xl font-extrabold text-transparent">
           Ask My AI Assisant
         </h2>
         <div>
-          <Card className="group grid grid-cols-2 gap-8 hover:bg-linear-to-bl  hover:from-blue-500/40 hover:to-transparent hover:to-40% shadow-[0_10px_15px_rgba(37,99,235,0.5),-1px_-1px_5px_rgba(37,99,235,0.5)] hover:shadow-blue-600 hover:shadow-[0_20px_20px_rgba(0,0,0,0.1),0_10px_10px_rgba(0,0,0,0.04),-2px_-2px_10px_rgba(37,99,235,0.7)] transition-all duration-500">
-            <div className="flex flex-col justify-between overflow-hidden space-y-4 h-120 rounded-2xl bg-card border border-border">
-              <div className="p-2 text-center bg-blue-600 rounded-t-2xl">
+          <Card className="group grid md:grid-cols-2 lg:gap-8 hover:bg-linear-to-bl  hover:from-blue-500/40 hover:to-transparent hover:to-40% shadow-[0_10px_15px_rgba(37,99,235,0.5),-1px_-1px_5px_rgba(37,99,235,0.5)] hover:shadow-blue-600 hover:shadow-[0_20px_20px_rgba(0,0,0,0.1),0_10px_10px_rgba(0,0,0,0.04),-2px_-2px_10px_rgba(37,99,235,0.7)] transition-all duration-500">
+            <div className="flex flex-col justify-between overflow-hidden space-y-4 h-120 rounded-2xl border border-border">
+              <div className="p-2 text-center text-white font-medium bg-blue-600 rounded-t-2xl">
                 AI Assistance
               </div>
               <div
@@ -204,13 +207,13 @@ const AI = () => {
                   })}
                 </AnimatePresence>
               </div>
-              <div className="flex py-2 items-center justify-center space-x-2 text-center rounded-b-2xl">
+              <div className="flex m-1 items-center justify-center space-x-2 text-center rounded-b-2xl">
                 <textarea
                   onKeyDown={onEnterPress}
                   onChange={handleTyping}
                   name="userchat"
                   ref={textareaRef}
-                  className="overflow-hidden w-[85%] resize-none h-12 border border-blue-400 rounded-full py-2.5 px-3 focus:outline-none
+                  className="overflow-hidden w-[85%] py-1 resize-none h-10 sm:h-12 border border-blue-400 rounded-full sm:py-2.5 px-3 focus:outline-none
              focus:ring-2
              focus:ring-blue-500
              focus:border-blue-500
@@ -225,7 +228,7 @@ const AI = () => {
                   disabled={isSending}
                   type="button"
                   aria-label="Send message"
-                  className="size-12 rounded-full bg-blue-600 text-text-primary
+                  className="size-10 md:size-12 rounded-full bg-blue-600 text-text-primary
              flex items-center justify-center
            hover:bg-blue-600/80
            hover:shadow-blue-600
@@ -236,11 +239,16 @@ const AI = () => {
              cursor-pointer
              focus:outline-none"
                 >
-                  <FontAwesomeIcon icon={faPaperPlane} className="size-6" />
+                  <FontAwesomeIcon
+                    icon={faPaperPlane}
+                    className="size-4 md:size-6"
+                  />
                 </button>
               </div>
             </div>
-            <RobotCanvas currentAnimation={robotAnimation} />
+            <div className="hidden md:flex">
+              <RobotCanvas currentAnimation={robotAnimation} />
+            </div>
           </Card>
         </div>
       </Container>
