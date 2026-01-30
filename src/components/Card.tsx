@@ -1,13 +1,18 @@
 import type React from "react";
+import type { Ref } from "react";
 
 interface cardProps {
+  ref?: Ref<HTMLElement>;
   children: React.ReactNode;
   className: string;
 }
 
-const Card = ({ children, className }: cardProps) => {
+const Card = ({ ref, children, className }: cardProps) => {
   return (
-    <article className={`rounded-2xl bg-dark p-6 w-full ${className}`}>
+    <article
+      ref={ref}
+      className={`rounded-2xl bg-dark p-6 w-full ${className}`}
+    >
       {children}
     </article>
   );

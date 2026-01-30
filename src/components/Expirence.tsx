@@ -4,7 +4,7 @@ import kau from "../assets/KAU.jpg";
 import { motion } from "motion/react";
 import Container from "./Container";
 import Card from "./Card";
-import { useState } from "react";
+import { useEffect, useRef, useState, type JSX } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
@@ -53,6 +53,10 @@ const expirences: IExpirence[] = [
 ];
 
 const Expirence = () => {
+  const contentRefs = useRef<(HTMLElement | null)[]>([]);
+  const [showExpandButton, setShowExpandButton] = useState<{
+    [key: number]: boolean;
+  }>({});
   const [expandedCards, setExpandedCards] = useState<{
     [key: number]: boolean;
   }>({});
@@ -63,6 +67,24 @@ const Expirence = () => {
       [index]: !prev[index],
     }));
   };
+
+  useEffect(() => {
+    const measure = () => {
+      const result: { [key: number]: boolean } = {};
+
+      contentRefs.current.forEach((el, idx) => {
+        if (el) {
+          result[idx] = el.clientHeight > 360;
+        }
+      });
+
+      setShowExpandButton(result);
+    };
+
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   return (
     <motion.section
@@ -126,19 +148,27 @@ const Expirence = () => {
                         isExpanded ? "max-h-400" : "max-h-36 lg:max-h-none"
                       }`}
                     >
-                      <ul
-                        className={`text-gray-400 space-y-1 list-disc pl-6 ${
-                          isLeft ? "" : " md:pr-4"
-                        }`}
+                      <div
+                        ref={(el) => {
+                          contentRefs.current[idx] = el;
+                        }}
                       >
-                        {exp.description.map((d, i) => (
-                          <li key={i}>{d}</li>
-                        ))}
-                      </ul>
+                        <ul
+                          className={`text-gray-400 space-y-1 list-disc pl-6 ${
+                            isLeft ? "" : " md:pr-4"
+                          }`}
+                        >
+                          {exp.description.map((d, i) => (
+                            <li key={i}>{d}</li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                     <button
                       onClick={() => toggleExpand(idx)}
-                      className="lg:hidden text-xs font-semibold text-white/90 transition-colors uppercase tracking-wide"
+                      className={`lg:hidden text-xs font-semibold text-white/90 transition-colors uppercase tracking-wide ${
+                        showExpandButton[idx] ? "flex" : "hidden"
+                      }`}
                     >
                       {isExpanded ? (
                         <p>
