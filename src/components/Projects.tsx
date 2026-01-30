@@ -115,7 +115,7 @@ const Projects = () => {
     <>
       <motion.section
         id="projects"
-        className="scroll-mt-40"
+        className="relative scroll-mt-40"
         ref={sectionRef}
         initial={{ opacity: 0, y: 100 }}
         whileInView={{ opacity: 1, y: 0 }}

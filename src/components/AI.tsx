@@ -133,7 +133,7 @@ const AI = () => {
   return (
     <motion.section
       id="AI"
-      className="scroll-mt-50"
+      className="relative scroll-mt-50"
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}

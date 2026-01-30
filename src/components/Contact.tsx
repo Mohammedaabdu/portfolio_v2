@@ -61,7 +61,7 @@ const Contact = () => {
   return (
     <motion.section
       id="contact"
-      className="scroll-mt-40"
+      className="relative scroll-mt-40"
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
