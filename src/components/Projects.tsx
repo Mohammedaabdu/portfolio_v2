@@ -2,6 +2,7 @@ import Card from "./Card";
 import solarSystem from "../assets/solarSystem.png";
 import trejdegruppen from "../assets/tredjegruppenAB.png";
 import portfolio from "../assets/portfolio.png";
+import portfolioV2 from "../assets/portfolioV2.png";
 import { motion, useScroll, useTransform } from "motion/react";
 import Tilt from "react-parallax-tilt";
 import Container from "./Container";
@@ -44,10 +45,10 @@ const projectList: IProject[] = [
     techStack: ["React", "Typescript", "Html", "TailwindCss", "Framer Motion"],
   },
   {
-    img: portfolio,
+    img: portfolioV2,
     prjectName: "Portfolio V2",
     description: "This site — a 3D-enhanced portfolio",
-    url: "https://mohammed-3d-portfolio.vercel.app/",
+    url: "https://portfolio-v2-mgl1g3ctn-mohammed-abdus-projects.vercel.app/",
     githubUrl: "https://github.com/Mohammedaabdu/portfolio_v2",
     techStack: [
       "React",
@@ -181,7 +182,7 @@ const Projects = () => {
                           <a
                             href={project.url}
                             target="_blank"
-                            className={`flex items-baseline ${colors[idx].text} font-semibold`}
+                            className={`flex hover:underline items-baseline ${colors[idx].text} font-semibold`}
                           >
                             <span className="relative flex size-3 mr-2">
                               <span
@@ -196,7 +197,7 @@ const Projects = () => {
                           <a
                             href={project.githubUrl}
                             target="_blank"
-                            className={`flex items-center ${colors[idx].text} font-semibold`}
+                            className={`flex hover:underline items-center ${colors[idx].text} font-semibold`}
                           >
                             View Github Code
                             <FontAwesomeIcon
