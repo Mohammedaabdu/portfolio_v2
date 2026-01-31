@@ -64,7 +64,7 @@ const Contact = () => {
       className="relative scroll-mt-40"
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1 }}
+      transition={{ duration: 0.4 }}
       viewport={{ margin: "0px 0px -200px 0px" }}
     >
       <Container>

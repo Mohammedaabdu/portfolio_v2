@@ -114,15 +114,7 @@ const Projects = () => {
 
   return (
     <>
-      <motion.section
-        id="projects"
-        className="relative scroll-mt-40"
-        ref={sectionRef}
-        initial={{ opacity: 0, y: 100 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        viewport={{ margin: "0px 0px -200px 0px" }}
-      >
+      <section id="projects" className="relative scroll-mt-40" ref={sectionRef}>
         <Container>
           <motion.h2
             style={{ opacity: titleOpacity }}
@@ -214,7 +206,7 @@ const Projects = () => {
             </div>
           </div>
         </Container>
-      </motion.section>
+      </section>
     </>
   );
 };

@@ -92,7 +92,7 @@ const Expirence = () => {
       className="relative scroll-mt-20"
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1 }}
+      transition={{ duration: 0.5 }}
       viewport={{ margin: "0px 0px -200px 0px" }}
     >
       <Container>
