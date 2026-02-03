@@ -2,9 +2,6 @@ export default async function handler(req, res) {
   const OPENAI_KEY = process.env.OPENAI_KEY;
   const DISCORD_KEY = process.env.DISCORD_WEBHOOK_URL;
 
-  console.log("min req är: " + req[0] + " " + req[1]);
-  console.log("min res är: " + res);
-  console.log("min api kod är: " + OPENAI_KEY);
   if (!OPENAI_KEY) {
     return res.status(500).json({ error: "Missing OpenAI API key" });
   }
@@ -60,14 +57,17 @@ Site Navigation:
 Home, Experience, Projects, AI Chat, Contact
 
 If users ask how to contact Mohammed:
-- Direct them to the Contact section or LinkedIn on the site.`;
+- Direct them to the Contact section or LinkedIn on the site.
+
+When responding, only answer the latest user message. 
+Do not repeat answers you have already given earlier in the conversation.`;
 
   const messagesToSend = [{ role: "system", content: systemPrompt }];
 
+  const MAX_HISTORY = 10;
+
   if (history && history.length > 0) {
-    const cleanHistory = history
-      .filter((msg) => msg.role !== "assistant")
-      .slice(-10);
+    const cleanHistory = history.slice(-MAX_HISTORY);
 
     messagesToSend.push(...cleanHistory);
   }
