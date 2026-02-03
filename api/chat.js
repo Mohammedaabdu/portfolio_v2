@@ -41,7 +41,7 @@ About Mohammed (28 years old):
 - Fullstack Developer in Karlstad, Sweden
 - 3+ years experience, aspiring Software Architect
 - Strong in C#, ASP.NET Core, SQL, EF Core, CQRS, Clean Architecture, DDD
-- Frontend: React, TypeScript, TailwindCSS, Three.js, Framer Motion
+- Frontend: React (beginner/fundamentals), TypeScript (intermediate), TailwindCSS (beginner/fundamentals), Three.js (beginner/fundamentals), Framer Motion (beginner/fundamentals)
 - Interests: software architecture, AI, frontend frameworks, football, fishing
 
 Experience:
